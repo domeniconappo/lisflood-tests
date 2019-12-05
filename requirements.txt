@@ -1,2 +1,4 @@
 lisflood-utilities
 pytest
+lxml
+beautifulsoup4

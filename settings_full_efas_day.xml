@@ -25,76 +25,66 @@ You can use builtin path variables in this template and reference to other paths
 <lfsettings>
 
     <lfoptions>
-
-
-        <setoption choice="0" name="TemperatureInKelvin"/>
-        <setoption choice="0" name="gridSizeUserDefined"/>
-
-        <setoption choice="0" name="inflow"/>
-        <setoption choice="1" name="wateruse"/>
-        <setoption choice="1" name="groundwaterSmooth"/>
-        <setoption choice="1" name="wateruseRegion"/>
-        <setoption choice="1" name="drainedIrrigation"/>
-        <setoption choice="1" name="riceIrrigation"/>
-        <setoption choice="1" name="indicator"/>
-
-        <setoption choice="0" name="TransientLandUseChange"/>
-
-        <setoption choice="0" name="openwaterevapo"/>
-        <setoption choice="0" name="varfractionwater"/>
-
+        <!-- MODULES ACTIVATION -->
+        <setoption choice="1" name="groundwaterSmooth" />
+        <setoption choice="1" name="wateruse" />
+        <setoption choice="1" name="TransientWaterDemandChange" />
+        <setoption choice="0" name="useWaterDemandAveYear" />
+        <setoption choice="1" name="wateruseRegion" />
+        <setoption choice="1" name="drainedIrrigation" />
+        <setoption choice="1" name="riceIrrigation" />
+        <setoption choice="1" name="openwaterevapo"/>
         <setoption choice="1" name="simulateLakes"/>
         <setoption choice="1" name="simulateReservoirs"/>
-        <setoption choice="0" name="simulatePF"/>
-
+        <setoption choice="1" name="simulatePF"/>
         <setoption choice="1" name="SplitRouting"/>
+
+        <setoption choice="0" name="indicator" />
+        <setoption choice="0" name="TransientLandUseChange"/>
+        <setoption choice="0" name="varfractionwater"/>
+        <setoption choice="0" name="inflow"/>
         <setoption choice="0" name="InitLisflood"/>
         <setoption choice="0" name="InitLisfloodwithoutSplit"/>
 
-        <setoption choice="0" name="repEndMaps"/>
+        <!-- REPORTING STATE AND END MAPS -->
+        <setoption choice="1" name="repEndMaps"/>
         <setoption choice="1" name="repStateMaps"/>
-        <setoption choice="1" name="repDischargeTs"/>
 
-        <setoption choice="0" name="repDischargeMaps"/>
-        <setoption choice="0" name="repStateUpsGauges"/>
-        <setoption choice="0" name="repRateUpsGauges"/>
-        <setoption choice="0" name="repMeteoUpsGauges"/>
-
-
-        <setoption choice="1" name="repSnowMaps"/>
-        <setoption choice="1" name="repPF1Maps"/>
-        <setoption choice="1" name="repPF2Maps"/>
-        <setoption choice="1" name="repLZMaps"/>
-        <setoption choice="1" name="repUZMaps"/>
-        <setoption choice="1" name="repGwPercUZLZMaps"/>
-        <setoption choice="1" name="repRWS"/>
-        <setoption choice="1" name="repStressDays"/>
+        <!-- REPORTING MAPS -->
+        <setoption choice="1" name="repDischargeMaps"/>
         <setoption choice="1" name="repsimulateLakes"/>
         <setoption choice="1" name="repsimulateReservoirs"/>
         <setoption choice="1" name="repSnowMaps"/>
-        <setoption choice="0" name="repPFMaps"/>
+        <setoption choice="1" name="repPFMaps"/>
         <setoption choice="1" name="repLZMaps"/>
         <setoption choice="1" name="repUZMaps"/>
         <setoption choice="1" name="repGwPercUZLZMaps"/>
         <setoption choice="1" name="repRWS"/>
+        <setoption choice="1" name="repTotalAbs"/>
+        <setoption choice="1" name="repTotalWUse"/>
+        <setoption choice="1" name="repWIndex"/>
 
+        <setoption choice="0" name="repPF1Maps"/>
+        <setoption choice="0" name="repPF2Maps"/>
+        <setoption choice="0" name="repStressDays"/>
 
+        <!-- REPORTING TIME-SERIES -->
+        <setoption choice="1" name="repDischargeTs"/>
+        <setoption choice="1" name="repStateUpsGauges"/>
+        <setoption choice="1" name="repRateUpsGauges"/>
+        <setoption choice="1" name="repMeteoUpsGauges"/>
+
+        <!-- MISCELLANEOUS -->
         <setoption choice="1" name="readNetcdfStack"/>
         <setoption choice="1" name="writeNetcdfStack"/>
         <setoption choice="1" name="writeNetcdf"/>
 
         <setoption choice="0" name="MonteCarlo"/>
         <setoption choice="0" name="EnKF"/>
-
         <setoption choice="0" name="repMBTs"/>
         <setoption choice="0" name="repInternalCom"/>
-
-        <setoption choice="1" name="repTotalAbs"/>
-        <setoption choice="1" name="repTotalWUse"/>
-        <setoption choice="1" name="repWIndex"/>
-        <setoption choice="1" name="TransientWaterDemandChange"/>
-        <setoption choice="0" name="useWaterDemandAveYear"/>
-
+        <setoption choice="0" name="TemperatureInKelvin"/>
+        <setoption choice="0" name="gridSizeUserDefined"/>
 
     </lfoptions>
 
@@ -117,16 +107,109 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
     - "1"           : serial execution (not parallel)
     - "2", "3", ... : manual setting of the number of parallel threads.
                       (if exceeding the number of CPUs, the option is set to "0") -->
-            <textvar name="numCPUs_parallelKinematicWave" value="30"/>
+            <textvar name="numCPUs_parallelKinematicWave" value="4"/>
 
 
-            <textvar name="PathRoot" value="/FLOODS/lisflood/Europe">
+            <textvar name="PathRoot" value="/workarea/EFAS">
                 <comment>
                     Root directory
                 </comment>
             </textvar>
+            <comment>
+                **************************************************************
+                FILE PATHS
+                **************************************************************
+            </comment>
 
-            <textvar name="MaskMap" value="$(PathRoot)/maps_netcdf/area.nc">
+            <!-- menta -->
+            <textvar name="PathOut" value="/workarea/lf_results/EFAS/out_daily">
+                <comment>
+                    Output path (org=$(PathRoot)/out)
+                </comment>
+            </textvar>
+
+            <textvar name="PathInit" value="/workarea/lf_results/EFAS/InitSafe">
+                <comment>
+                    Path of the initial value maps e.g. lzavin.map (org=$(PathRoot)/outPo)
+                </comment>
+            </textvar>
+
+            <textvar name="PathMaps" value="$(PathRoot)">
+                <comment>
+                    Maps path
+                </comment>
+            </textvar>
+
+            <textvar name="PathInflow" value="$(PathRoot)/inflow">
+                <comment>
+                    Inflow pathS
+                </comment>S
+            </textvar>
+
+
+            <textvar name="PathParams" value="$(PathMaps)/parameters">
+                <comment>
+                    Calibration parameter path
+                </comment>
+            </textvar>
+
+            <textvar name="PathTables" value="$(PathRoot)/tables">
+                <comment>
+                    Tables path
+                </comment>
+            </textvar>
+
+            <textvar name="PathMapsTables" value="$(PathMaps)/table2map">
+                <comment>
+                    Maps instead tables path
+                </comment>
+            </textvar>
+
+            <textvar name="PathSoilHyd" value="$(PathMaps)/soilhyd">
+                <comment>
+                    Maps instead tables for soil hydraulics path
+                </comment>
+            </textvar>
+
+            <textvar name="PathMapsLandUseChange" value="$(PathRoot)/landusechange">
+                <comment>
+                    Maps for transient land use changes
+                    rcp85_20062125
+                </comment>
+            </textvar>
+
+            <textvar name="PathMapsLanduse" value="$(PathRoot)/landuse2010">
+                <comment>
+                    Maps for land use fractions and related land use maps
+                </comment>
+            </textvar>
+
+            <textvar name="PathWaterUse" value="$(PathRoot)/wateruse2006">
+                <comment>
+                    Water use maps path
+                </comment>
+            </textvar>
+
+            <textvar name="PathMeteo" value="$(PathRoot)/EFAS_forcings">
+                <comment>
+                    ./meteoWatch
+                    Meteo path
+                </comment>
+            </textvar>
+
+            <textvar name="PathLAI" value="$(PathRoot)/lai">
+                <comment>
+                    Leaf Area Index maps path
+                </comment>
+            </textvar>
+
+            <textvar name="PathVarWaterfraction" value="$(PathRoot)">
+                <comment>
+                    variable water fraction maps path
+                </comment>
+            </textvar>
+
+            <textvar name="MaskMap" value="$(PathRoot)/area.nc">
                 <comment>
                     70 40 0.1 -8.6 43.3 # Douro
                     30 30 0.1 6.0 52.0
@@ -201,7 +284,7 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
                 </comment>
             </textvar>
 
-            <textvar name="StepStart" value="02/01/1990 06:00">
+            <textvar name="StepStart" value="06/01/2015 06:00">
                 <comment>
                     SMHI r1-r4 1/1/2066 = 21916
                     Number of first time step in simulation
@@ -210,18 +293,16 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
 
             <!--menta-->
             <!--<textvar name="StepEnd" value="10957">-->
-            <textvar name="StepEnd" value="18">
+            <textvar name="StepEnd" value="30/06/2017 06:00">
                 <comment>
                     IPSL RCP85 2011-2099 32507
-
-
                     Number of last time step in simulation
                 </comment>
             </textvar>
 
             <!-- menta -->
             <!--<textvar name="ReportSteps" value="1..10957">-->
-            <textvar name="ReportSteps" value="1..18">
+            <textvar name="ReportSteps" value="1..99999">
                 <comment>
                     Time steps at which to write model state maps (i.e. only
                     those maps that would be needed to define initial conditions
@@ -394,105 +475,6 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
             </textvar>
 
         </group>
-
-        <group>
-
-            <comment>
-                **************************************************************
-                FILE PATHS
-                **************************************************************
-            </comment>
-
-            <!-- menta -->
-            <textvar name="PathOut" value="/FLOODS/lisflood/testValerio/outNF2017_MergedYeslakesWUSE/">
-                <comment>
-                    Output path (org=$(PathRoot)/out)
-                </comment>
-            </textvar>
-
-            <textvar name="PathInit" value="/FLOODS/lisflood/testValerio/outNF20152016">
-                <comment>
-                    Path of the initial value maps e.g. lzavin.map (org=$(PathRoot)/outPo)
-                </comment>
-            </textvar>
-
-            <textvar name="PathMaps" value="$(PathRoot)/maps_netcdf">
-                <comment>
-                    Maps path
-                </comment>
-            </textvar>
-
-            <textvar name="PathInflow" value="$(PathRoot)/inflow">
-                <comment>
-                    Inflow path
-                </comment>
-            </textvar>
-
-
-            <textvar name="PathParams" value="$(PathMaps)/parameters">
-                <comment>
-                    Calibration parameter path
-                </comment>
-            </textvar>
-
-            <textvar name="PathTables" value="$(PathRoot)/tables">
-                <comment>
-                    Tables path
-                </comment>
-            </textvar>
-
-            <textvar name="PathMapsTables" value="$(PathMaps)/table2map">
-                <comment>
-                    Maps instead tables path
-                </comment>
-            </textvar>
-
-            <textvar name="PathSoilHyd" value="$(PathMaps)/soilhyd">
-                <comment>
-                    Maps instead tables for soil hydraulics path
-                </comment>
-            </textvar>
-
-            <textvar name="PathMapsLandUseChange" value="$(PathRoot)/maps_netcdf/landusechange">
-                <comment>
-                    Maps for transient land use changes
-                    rcp85_20062125
-                </comment>
-            </textvar>
-
-            <textvar name="PathMapsLanduse" value="$(PathRoot)/maps_netcdf/landuse2006">
-                <comment>
-                    Maps for land use fractions and related land use maps
-                </comment>
-            </textvar>
-
-            <textvar name="PathWaterUse" value="$(PathRoot)/maps_netcdf/wateruse2006">
-                <comment>
-                    Water use maps path
-                </comment>
-            </textvar>
-
-            <textvar name="PathMeteo" value="/FLOODS/lisflood/Europe/meteo_19900102_20180101">
-                <comment>
-                    ./meteoWatch
-                    Meteo path
-                </comment>
-            </textvar>
-
-            <textvar name="PathLAI" value="$(PathRoot)/lai_netcdf">
-                <comment>
-                    Leaf Area Index maps path
-                </comment>
-            </textvar>
-
-            <textvar name="PathVarWaterfraction" value="$(PathRoot)/maps_netcdf">
-                <comment>
-                    variable water fraction maps path
-                </comment>
-            </textvar>
-
-        </group>
-
 
         <group>
 
@@ -1043,6 +1025,16 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
                     EnergyConsumptiveUseFraction=0.025
                 </comment>
             </textvar>
+            <textvar name="Latitude" value="$(PathMaps)/lat.map">
+                <comment>
+                    # Consumptive Use (1-Recycling ratio) for energy water use (0-1)
+                    # Source: Torcellini et al. (2003) "Consumptive Use for US Power Production"
+                    # map advised by Neil Edwards, Energy Industry
+                    # the UK and small French rivers the consumptive use varies between 1:2 and 1:3, so 0.33-0.50
+                    # For plants along big rivers like Rhine and Danube the 0.025 is ok
+                    EnergyConsumptiveUseFraction=0.025
+                </comment>
+            </textvar>
 
             <textvar name="DomesticConsumptiveUseFraction" value="0.20">
                 <comment>
@@ -1140,7 +1132,7 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
                 </comment>
             </textvar>
 
-            <textvar name="LakeMask" value="$(PathMaps)/lakemask.map">
+            <textvar name="LakeMask" value="$(PathMaps)/lakemask.nc">
                 <comment>
                     Mask with Lakes from GLWD database
                 </comment>
@@ -1181,7 +1173,7 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
                 </comment>
             </textvar>
 
-            <textvar name="UpAreaTrans" value="$(PathMaps)/uparea.map">
+            <textvar name="UpAreaTrans" value="$(PathMaps)/upArea.nc">
                 <comment>
                     upstream area
                 </comment>
@@ -1888,7 +1880,7 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                 **************************************************************
             </comment>
 
-            <textvar name="LZAvInflowMap" value="/FLOODS/lisflood/testValerio/outNF20152016/lzavin.nc">
+            <textvar name="LZAvInflowMap" value="$(PathInit)/lzavin.nc">
                 <comment>
                     $(PathInitCold)/lzavin.map
                     Reported map of average percolation rate from upper to
@@ -1896,7 +1888,7 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                 </comment>
             </textvar>
 
-            <textvar name="AvgDis" value="/FLOODS/lisflood/testValerio/outNF20152016/avgdis.nc">
+            <textvar name="AvgDis" value="$(PathInit)/avgdis.nc">
                 <comment>
                     $(PathInitCold)/avgdis.map
                     CHANNEL split routing in two lines
@@ -2310,6 +2302,12 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                     Source: EEA (2005) State of Environment
                 </comment>
             </textvar>
+            <textvar name="Latitude" value="$(Latitude)">
+                <comment>
+                    Consumptive Use (1-Recycling ratio) for domestic water use (0-1)
+                    Source: EEA (2005) State of Environment
+                </comment>
+            </textvar>
 
             <textvar name="LeakageFraction" value="$(LeakageFraction)">
                 <comment>
@@ -2463,25 +2461,25 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                 </comment>
             </textvar>
 
-            <textvar name="RicePlantingDay1" value="$(PathMapsTables)/riceplantingday1.map">
+            <textvar name="RicePlantingDay1" value="$(PathMapsTables)/riceplantingday1.nc">
                 <comment>
                     map with starting day of the year
                 </comment>
             </textvar>
 
-            <textvar name="RiceHarvestDay1" value="$(PathMapsTables)/riceharvestday1.map">
+            <textvar name="RiceHarvestDay1" value="$(PathMapsTables)/riceharvestday1.nc">
                 <comment>
                     map with starting day of the year
                 </comment>
             </textvar>
 
-            <textvar name="RicePlantingDay2" value="$(PathMapsTables)/riceplantingday2.map">
+            <textvar name="RicePlantingDay2" value="$(PathMapsTables)/riceplantingday2.nc">
                 <comment>
                     map with starting day of the year
                 </comment>
             </textvar>
 
-            <textvar name="RiceHarvestDay2" value="$(PathMapsTables)/riceharvestday2.map">
+            <textvar name="RiceHarvestDay2" value="$(PathMapsTables)/riceharvestday2.nc">
                 <comment>
                     map with starting day of the year
                 </comment>
@@ -4121,7 +4119,7 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                     </comment>
                 </textvar>
 
-                <textvar name="RiceFraction" value="$(PathMapsLanduse)/fracrice.map">
+                <textvar name="RiceFraction" value="$(PathMapsLanduse)/fracrice.nc">
                     <comment>
                         rice fraction of a pixel (0-1)
                     </comment>
@@ -4133,13 +4131,13 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                     </comment>
                 </textvar>
 
-                <textvar name="FractionGroundwaterUsed" value="$(PathMapsLanduse)/fracgwusedNew.map">
+                <textvar name="FractionGroundwaterUsed" value="$(PathMapsLanduse)/fracgwusedNew.nc">
                     <comment>
                         groundwater used fraction of a pixel (0-1)
                     </comment>
                 </textvar>
 
-                <textvar name="FractionNonConventionalWaterUsed" value="$(PathMapsLanduse)/fracncused.map">
+                <textvar name="FractionNonConventionalWaterUsed" value="$(PathMapsLanduse)/fracncused.nc">
                     <comment>
                         NonConventionalWaterUsed (0-1)
                     </comment>
@@ -4249,7 +4247,7 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                     </comment>
                 </textvar>
 
-                <textvar name="ChanLength" value="$(PathMaps)/chanlength.map">
+                <textvar name="ChanLength" value="$(PathMaps)/chanleng.nc">
                     <comment>
                         Channel length [meters]
                     </comment>
@@ -4476,7 +4474,7 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                     </comment>
                 </textvar>
 
-                <textvar name="ReservoirSites" value="$(PathRoot)/maps_netcdf/res.nc">
+                <textvar name="ReservoirSites" value="$(PathRoot)/res.nc">
                     <comment>
                         Map with location of reservoirs (number]
                     </comment>
@@ -4595,7 +4593,7 @@ LFBINDING: MORE LOW-LEVEL CONTROL OVER MODEL IN- AND OUTPUT
                     **************************************************************
                 </comment>
 
-                <textvar name="LakeSites" value="$(PathRoot)/maps_netcdf/lakes.nc">
+                <textvar name="LakeSites" value="$(PathRoot)/lakes.nc">
                     <comment>
                         Map with location of lakes
                     </comment>
