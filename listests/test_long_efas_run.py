@@ -2,7 +2,6 @@ import os
 import sys
 import uuid
 import subprocess
-import unittest
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -10,15 +9,22 @@ import pytest
 
 from lisfloodutilities.compare import NetCDFComparator, TSSComparator
 
-from listests import logger
+from listests import logger, run_command
 
 
 """
+Tests with settings_full_efas_day.xml
+With start and stop:
+
+Start Step - End Step:  9136  -  10042
+Start Date - End Date:  2015-01-06 06:00:00  -  2017-06-30 06:00:00
+
 How to run:
 
-pytest test_long_efas_run.py -L /workarea/lisflood_versions/lf_first_merged/lisf1.py -R /workarea/EFAS/ \
+pytest test_long_efas_run.py -L /workarea/lisflood_versions/1_e5eb9f03/lisf1.py -R /workarea/EFAS/ \
   -M /workarea/EFAS/EFAS_forcings/ -O /workarea/lf_results/1_e5eb9f03 -s 
   -P /workarea/virtualenvs/lisflood27/bin/python -I /workarea/lf_results/reference/EFAS/InitSafe/
+  
 """
 
 @pytest.mark.usefixtures("options")
@@ -29,38 +35,36 @@ class TestLongRun:
         # run lisflood
         pybin = cls.options['python']
         lisflood_py = cls.options['lisflood']
-        pathout = cls.options['PathOut']
-        if not lisflood_py:
-            if not pathout:
-                raise ValueError('You must set --pathout to point to existing LISFLOOD results, '
-                                 'if not setting --lisflood option to run a simulation with a specific version')
-            return
+        compile_krw = cls.options['lisflood'].parent.joinpath('hydrological_modules/compile_kinematic_wave_parallel_tools.py')
+        pathout = cls.options['pathout']
         cls.settings_xml = cls.get_settings()
         cell = cls.settings_xml.select('lfuser textvar[name="MaskMap"]')[0]
         cls.mask_map = cell.attrs['value'].replace('$(PathRoot)', str(cls.options['pathroot']))
+
+        # Generating XML settings on fly from template
         uid = uuid.uuid4()
         filename = f'./efas_day_{uid}.xml'
-        logger.info(f'>>>>Generated {filename}\n')
         with open(filename, 'w') as dest:
             dest.write(cls.settings_xml.prettify())
         cls.settings_filepath = Path(filename).absolute()
-        logger.info(f'>>>>Executing....:\n{pybin} {lisflood_py} {cls.settings_filepath}\n')
-        logger.info(' =============== START OF LISFLOOD OUTPUT ===============')
-        lisflood_cmd = ' '.join((pybin.as_posix(), lisflood_py.as_posix(), cls.settings_filepath.as_posix()))
-        p = subprocess.Popen(args=(lisflood_cmd,),
-                             stdout=subprocess.PIPE, shell=True,
-                             stderr=subprocess.STDOUT, universal_newlines=True)
-        # Poll process for new output until finished
-        while True:
-            nextline = p.stdout.readline()
-            if nextline == '' and p.poll() is not None:
-                break
-            sys.stdout.write(nextline)
-            sys.stdout.flush()
-        logger.info(' =============== END OF LISFLOOD OUTPUT ===============')
 
-        if p.returncode:
-            raise subprocess.CalledProcessError(p.returncode, (pybin, lisflood_py, cls.settings_filepath))
+        if not lisflood_py:
+            if not pathout:
+                raise ValueError('If --lisflood option is not set you must pass --pathout argument'
+                                 ' to point to existing LISFLOOD results')
+            return
+
+        # Compile kinematic wave
+        kw_dir = lisflood_py.parent.joinpath('hydrological_modules/')
+        lis_dir = lisflood_py.parent.parent
+        compile_cmd = ' '.join((f'cd {kw_dir} &&', pybin.as_posix(), compile_krw.name, 'build_ext', '--inplace'))
+        run_command(compile_cmd)
+
+        logger.info(' ============================== START OF LISFLOOD OUTPUT ============================== ')
+        lisflood_cmd = ' '.join((f'cd {lis_dir} &&', pybin.as_posix(), 'lisflood/lisf1.py', cls.settings_filepath.as_posix()))
+        run_command(lisflood_cmd)
+        logger.info(' ============================== END OF LISFLOOD OUTPUT ================================ ')
+
 
     @classmethod
     def teardown_class(cls):
@@ -68,6 +72,9 @@ class TestLongRun:
 
     @classmethod
     def get_settings(cls):
+        """
+        Return XML representation of settings file, based on BeautifulSoup4
+        """
         tpl = open('./settings_full_efas_day.xml')
         soup = BeautifulSoup(tpl, 'lxml-xml')
         for textvar in ('PathRoot', 'PathMeteo', 'PathOut', 'PathStatic', 'PathInit'):
@@ -89,10 +96,10 @@ class TestLongRun:
         diffs = comparator.compare_dirs(self.options['reference'], self.options['pathout'])
         assert not diffs
 
-    def test_state_end_maps(self):
-        # 1. check if repEndMaps is True. If so, check that end maps were written
-        # 2. check if repStateMaps is True. If so, check that state maps were written
-        # 3. If both were written, last step in state maps must be identical to the unique step in end maps
-        pass
-    #     # comparator = NetCDFComparator(self.mask_map)
-    #     # res = comparator.compare_dirs(self.options['pathout'], self.options['reference'])
+    # def test_state_end_maps(self):
+    #     # 1. check if repEndMaps is True. If so, check that end maps were written
+    #     # 2. check if repStateMaps is True. If so, check that state maps were written
+    #     # 3. If both were written, last step in state maps must be identical to the unique step in end maps
+    #     pass
+    # #     # comparator = NetCDFComparator(self.mask_map)
+    # #     # res = comparator.compare_dirs(self.options['pathout'], self.options['reference'])

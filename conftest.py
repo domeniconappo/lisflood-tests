@@ -29,13 +29,14 @@ def options(request):
     options['pathout'] = request.config.getoption('--pathout') or options['pathroot']
     options['pathinit'] = request.config.getoption('--pathinit') or options['pathroot']
     options['reference'] = request.config.getoption('--reference')
-    if options['pathout'].exists():
-        logger.warning('Removing older results from %s', options['pathout'].as_posix())
+    if not options['pathout'].exists():
+        options['pathout'].mkdir()
+    elif options['pathout'].exists() and options['lisflood'] is not None and options['lisflood'].exists():
+        logger.warning('Removing older result from %s', options['pathout'].as_posix())
         for f in chain(options['pathout'].glob('*.nc'), options['pathout'].glob('*.tss'), options['pathout'].glob('*.end')):
             logger.warning('removing %s', f.as_posix())
             os.unlink(f)
-        logger.info('End of removing old results')
-    else:
-        options['pathout'].mkdir()
+    elif options['pathout'].exists() and options['lisflood'] is None:
+        logger.info('Comparing existing results: %s and %s', options['pathout'], options['reference'])
     request.cls.options = options
     return options
