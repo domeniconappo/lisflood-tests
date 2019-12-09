@@ -21,10 +21,15 @@ Start Date - End Date:  2015-01-06 06:00:00  -  2017-06-30 06:00:00
 
 How to run:
 
-pytest test_long_efas_run.py -L /workarea/lisflood_versions/1_e5eb9f03/lisf1.py -R /workarea/EFAS/ \
-  -M /workarea/EFAS/EFAS_forcings/ -O /workarea/lf_results/1_e5eb9f03 -s 
-  -P /workarea/virtualenvs/lisflood27/bin/python -I /workarea/lf_results/reference/EFAS/InitSafe/
-  
+pytest test_long_efas_run.py -s \
+  -L /workarea/lisflood_versions/1_e5eb9f03/lisf1.py \ # Path to lisf1.py main script
+  -R /workarea/EFAS/ \ # Path to root (PathRoot in settings file)
+  -M /workarea/EFAS/EFAS_forcings/ \  # Path to meteo forcings
+  -O /workarea/lf_results/1_e5eb9f03/ \  # Path to output folder
+  -P /workarea/virtualenvs/lisflood27/bin/python \  # Path to python binary
+  -I /workarea/lf_results/reference/EFAS/InitSafe/ \  # Path to init folder
+  -X /workarea/lf_results/reference/EFAS/out_daily  # Path to reference data (Oracle data)
+
 """
 
 @pytest.mark.usefixtures("options")
