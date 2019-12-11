@@ -7,11 +7,11 @@ import pytest
 
 from lisfloodutilities.compare import NetCDFComparator, TSSComparator
 
-from listests import logger, run_command
+from listests import logger, run_command, settings
 
 
 """
-Tests with settings_full_efas_day.xml
+Current Tests with settings_full_efas_day.xml/settings_full_efas_6hourly.xml
 With start and stop:
 
 Start Step - End Step:  9136  -  10042
@@ -27,6 +27,7 @@ pytest test_long_efas_run.py -s
   -P /workarea/virtualenvs/lisflood27/bin/python   # Path to python binary
   -I /workarea/lf_results/reference/EFAS/InitSafe/   # Path to init folder
   -X /workarea/lf_results/reference/EFAS/out_daily  # Path to reference data (Oracle data)
+  -T ECD  # kind of simulation: Efas Cold Daily in this case
 
 """
 
@@ -78,13 +79,14 @@ class TestLongRun:
         """
         Return XML representation of settings file, based on BeautifulSoup4
         """
-        tpl = open('./settings_full_efas_day.xml')
-        soup = BeautifulSoup(tpl, 'lxml-xml')
-        for textvar in ('PathRoot', 'PathMeteo', 'PathOut', 'PathStatic', 'PathInit'):
-            for tag in soup.find_all("textvar", {'name': textvar}):
-                logger.info(tag['value'])
-                logger.info('Replacing with %s', cls.options[textvar.lower()])
-                tag['value'] = cls.options[textvar.lower()]
+        settings_file = settings[cls.options['runtype']]
+        with open(settings_file) as tpl:
+            soup = BeautifulSoup(tpl, 'lxml-xml')
+            for textvar in ('PathRoot', 'PathMeteo', 'PathOut', 'PathStatic', 'PathInit'):
+                for tag in soup.find_all("textvar", {'name': textvar}):
+                    logger.info(tag['value'])
+                    logger.info('Replacing with %s', cls.options[textvar.lower()])
+                    tag['value'] = cls.options[textvar.lower()]
         return soup
 
     def test_rep_maps(self):

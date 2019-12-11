@@ -16,6 +16,8 @@ def pytest_addoption(parser):
     parser.addoption('-I', '--pathinit', type=lambda p: Path(p).absolute(), help='Path to Lisflood init data')
     parser.addoption('-O', '--pathout', type=lambda p: Path(p).absolute(), help='Path to Lisflood results')
     parser.addoption('-X', '--reference', type=lambda p: Path(p).absolute(), help='Path to Lisflood oracle results', required=True)
+    parser.addoption('-T', '--runtype', help='Run type: e.g. EC6=Efas Cold 6hourly run; GWD=Glofas Warm Daily run',
+                     choices=['ECD', 'EC6', 'EWD', 'EW6', 'GCD', 'GWD'], required=True, default='ECD')
 
 
 @pytest.fixture(scope='class', autouse=True)
@@ -29,6 +31,8 @@ def options(request):
     options['pathout'] = request.config.getoption('--pathout') or options['pathroot']
     options['pathinit'] = request.config.getoption('--pathinit') or options['pathroot']
     options['reference'] = request.config.getoption('--reference')
+    options['runtype'] = request.config.getoption('--runtype')
+
     if not options['pathout'].exists():
         options['pathout'].mkdir()
     elif options['pathout'].exists() and options['lisflood'] is not None and options['lisflood'].exists():

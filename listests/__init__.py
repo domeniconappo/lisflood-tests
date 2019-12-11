@@ -7,6 +7,13 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger()
 logger.propagate = False
 
+settings = {'ECD': 'settings_full_efas_day.xml',
+            'EC6': 'settings_full_efas_6hourly.xml',
+            'EWD': '',
+            'EW6': '',
+            'GCD': '',
+            'GWD': ''}
+
 
 def run_command(cmd):
     logger.info(f'>>>>Executing....:\n{cmd}\n')
