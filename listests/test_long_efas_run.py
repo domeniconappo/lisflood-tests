@@ -1,6 +1,7 @@
 import os
 import uuid
 from pathlib import Path
+from pprint import pprint
 
 from bs4 import BeautifulSoup
 import pytest
@@ -79,28 +80,31 @@ class TestLongRun:
         """
         Return XML representation of settings file, based on BeautifulSoup4
         """
-        settings_file = settings[cls.options['runtype']]
+        settings_key = f'{cls.options["runtype"]}-s' if cls.options['smallwindow'] else cls.options["runtype"]
+        settings_file = settings[settings_key]
         with open(settings_file) as tpl:
             soup = BeautifulSoup(tpl, 'lxml-xml')
             for textvar in ('PathRoot', 'PathMeteo', 'PathOut', 'PathStatic', 'PathInit'):
                 for tag in soup.find_all("textvar", {'name': textvar}):
-                    logger.info(tag['value'])
-                    logger.info('Replacing with %s', cls.options[textvar.lower()])
                     tag['value'] = cls.options[textvar.lower()]
         return soup
 
     def test_rep_maps(self):
         # check all nc. maps in output folder
-        logger.info(' ============================== START NETCDF TESTS ============================== ')
+        logger.info(' ================================= START NETCDF TESTS ================================= ')
         comparator = NetCDFComparator(self.mask_map)
-        diffs = comparator.compare_dirs(self.options['reference'], self.options['pathout'])
+        diffs = comparator.compare_dirs(self.options['reference'], self.options['pathout'], skip_missing=False)
+        if diffs:
+            pprint(diffs)
         assert not diffs
 
     def test_tss(self):
         # check all TSS in output folder
-        logger.info(' ============================== START TSS TESTS ============================== ')
+        logger.info(' ================================== START TSS TESTS ================================== ')
         comparator = TSSComparator()
-        diffs = comparator.compare_dirs(self.options['reference'], self.options['pathout'])
+        diffs = comparator.compare_dirs(self.options['reference'], self.options['pathout'], skip_missing=False)
+        if diffs:
+            pprint(diffs)
         assert not diffs
 
     # def test_state_end_maps(self):

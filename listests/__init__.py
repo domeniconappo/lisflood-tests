@@ -7,12 +7,20 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger()
 logger.propagate = False
 
-settings = {'ECD': 'settings_full_efas_day.xml',
-            'EC6': 'settings_full_efas_6hourly.xml',
-            'EWD': '',
-            'EW6': '',
-            'GCD': '',
-            'GWD': ''}
+settings = {
+    'ECD': 'settings_full_efas_day.xml',
+    'EC6': 'settings_full_efas_6hourly.xml',
+    'EWD': '',
+    'EW6': '',
+    'GCD': '',
+    'GWD': '',
+    'ECD-s': 'settings_full_efas_day_short.xml',
+    'EC6-s': 'settings_full_efas_6hourly_short.xml',
+    'EWD-s': '',
+    'EW6-s': '',
+    'GCD-s': '',
+    'GWD-s': '',
+}
 
 
 def run_command(cmd):
