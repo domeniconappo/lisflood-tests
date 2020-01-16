@@ -14,7 +14,7 @@
 TEMPLATE SETTINGS FILE Authors JvdK, PB
 TIPS:
 You can use builtin path variables in this template and reference to other paths in a relative way:
-  - SettingsPath: Path to the settings file
+  - SettingsPath: Path to the settings_files file
   - SettingsDir: alias for SettingsPath
   - ProjectPath: path to project root dir
   - ProjectDir: alias for ProjectPath

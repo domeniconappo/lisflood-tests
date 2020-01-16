@@ -14,7 +14,7 @@
 TEMPLATE SETTINGS FILE Authors JvdK, PB
 TIPS:
 You can use builtin path variables in this template and reference to other paths in a relative way:
-  - SettingsPath: Path to the settings file
+  - SettingsPath: Path to the settings_files file
   - SettingsDir: alias for SettingsPath
   - ProjectPath: path to project root dir
   - ProjectDir: alias for ProjectPath
@@ -284,7 +284,7 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
                 </comment>
             </textvar>
 
-            <textvar name="StepStart" value="01/04/2015 06:00">
+            <textvar name="StepStart" value="01/05/2015 06:00">
                 <comment>
                     SMHI r1-r4 1/1/2066 = 21916
                     Number of first time step in simulation
@@ -293,7 +293,7 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
 
             <!--menta-->
             <!--<textvar name="StepEnd" value="10957">-->
-            <textvar name="StepEnd" value="31/07/2015 06:00">
+            <textvar name="StepEnd" value="31/05/2015 06:00">
                 <comment>
                     IPSL RCP85 2011-2099 32507
                     Number of last time step in simulation

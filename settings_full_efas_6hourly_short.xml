@@ -122,13 +122,13 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
             </comment>
 
             <!-- menta -->
-            <textvar name="PathOut" value="/workarea/lf_results/EFAS/out_6hourly">
+            <textvar name="PathOut" value="/workarea/lf_results/EFAS/out_6hourly_1month">
                 <comment>
                     Output path (org=$(PathRoot)/out)
                 </comment>
             </textvar>
 
-            <textvar name="PathInit" value="/workarea/EFAS/InitSafe">
+            <textvar name="PathInit" value="/workarea/lf_results/EFAS/InitSafe">
                 <comment>
                     Path of the initial value maps e.g. lzavin.map (org=$(PathRoot)/outPo)
                 </comment>
@@ -284,7 +284,7 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
                 </comment>
             </textvar>
 
-            <textvar name="StepStart" value="06/01/2015 06:00">
+            <textvar name="StepStart" value="01/05/2015 06:00">
                 <comment>
                     SMHI r1-r4 1/1/2066 = 21916
                     Number of first time step in simulation
@@ -293,7 +293,7 @@ The option "numberParallelThreadsKinematicWave" may take the following values:
 
             <!--menta-->
             <!--<textvar name="StepEnd" value="10957">-->
-            <textvar name="StepEnd" value="30/06/2016 06:00">
+            <textvar name="StepEnd" value="31/05/2015 06:00">
                 <comment>
                     IPSL RCP85 2011-2099 32507
                     Number of last time step in simulation

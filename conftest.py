@@ -10,18 +10,23 @@ from listests import logger
 
 def pytest_addoption(parser):
     parser.addoption('-P', '--python', type=lambda p: Path(p), help='Path to python binary', default='python')
-    parser.addoption('-L', '--lisflood', type=lambda p: Path(p).absolute(), help='Path to main lisf1.py script')
-    parser.addoption('-R', '--pathroot', type=lambda p: Path(p).absolute(), help='Path to Lisflood root directory')
+    parser.addoption('-L', '--lisflood', type=lambda p: Path(p).absolute(),
+                     help='Path to main lisf1.py script')
+    parser.addoption('-R', '--pathroot', type=lambda p: Path(p).absolute(),
+                     help='Path to Lisflood root directory')
     parser.addoption('-S', '--pathstatic', type=lambda p: Path(p).absolute(),
                      help='Path to Lisflood static data (e.g. maps)')
-    parser.addoption('-M', '--pathmeteo', type=lambda p: Path(p).absolute(), help='Path to Lisflood meteo forcings')
-    parser.addoption('-I', '--pathinit', type=lambda p: Path(p).absolute(), help='Path to Lisflood init data')
-    parser.addoption('-O', '--pathout', type=lambda p: Path(p).absolute(), help='Path to Lisflood results')
+    parser.addoption('-M', '--pathmeteo', type=lambda p: Path(p).absolute(),
+                     help='Path to Lisflood meteo forcings')
+    parser.addoption('-I', '--pathinit', type=lambda p: Path(p).absolute(),
+                     help='Path to Lisflood init data')
+    parser.addoption('-O', '--pathout', type=lambda p: Path(p).absolute(),
+                     help='Path to Lisflood results')
     parser.addoption('-X', '--reference', type=lambda p: Path(p).absolute(),
                      help='Path to Lisflood oracle results', required=True)
-    parser.addoption('-T', '--runtype', help='Run type: e.g. EC6=Efas Cold 6hourly run; GWD=Glofas Warm Daily run',
+    parser.addoption('-T', '--runtype', help='Test Type: e.g. EC6=EFAS Cold 6hourly run; GWD=GloFAS Warm Daily run',
                      choices=['ECD', 'EC6', 'EWD', 'EW6', 'GCD', 'GWD'], required=True, default='ECD')
-    parser.addoption('-Q', '--smallwindow', help='If passed, it will run/compare a 4 months test',
+    parser.addoption('-Q', '--smallwindow', help='If passed, a short (1 month) test will run',
                      action='store_true', required=False, default=False)
 
 

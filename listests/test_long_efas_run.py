@@ -8,7 +8,7 @@ import pytest
 
 from lisfloodutilities.compare import NetCDFComparator, TSSComparator
 
-from listests import logger, run_command, settings
+from listests import logger, run_command, settings_files
 
 
 """
@@ -22,7 +22,7 @@ How to run:
 
 pytest test_long_efas_run.py -s
   -L /workarea/lisflood_versions/1_e5eb9f03/lisf1.py  # Path to lisf1.py main script
-  -R /workarea/EFAS/  # Path to root (PathRoot in settings file)
+  -R /workarea/EFAS/  # Path to root (PathRoot in settings_files file)
   -M /workarea/EFAS/EFAS_forcings/   # Path to meteo forcings
   -O /workarea/lf_results/1_e5eb9f03/   # Path to output folder
   -P /workarea/virtualenvs/lisflood27/bin/python   # Path to python binary
@@ -46,9 +46,9 @@ class TestLongRun:
         cell = cls.settings_xml.select('lfuser textvar[name="MaskMap"]')[0]
         cls.mask_map = cell.attrs['value'].replace('$(PathRoot)', str(cls.options['pathroot']))
 
-        # Generating XML settings on fly from template
+        # Generating XML settings_files on fly from template
         uid = uuid.uuid4()
-        filename = f'./efas_day_{uid}.xml'
+        filename = f'./settings_{uid}.xml'
         with open(filename, 'w') as dest:
             dest.write(cls.settings_xml.prettify())
         cls.settings_filepath = Path(filename).absolute()
@@ -57,6 +57,7 @@ class TestLongRun:
             if not pathout:
                 raise ValueError('If --lisflood option is not set you must pass --pathout argument'
                                  ' to point to existing LISFLOOD results')
+            # no need to run lisflood; just compare existing results
             return
 
         # Compile kinematic wave
@@ -78,10 +79,11 @@ class TestLongRun:
     @classmethod
     def get_settings(cls):
         """
-        Return XML representation of settings file, based on BeautifulSoup4
+        Return XML representation of settings_files file, based on BeautifulSoup4
         """
+        # -s suffix means 'small window'
         settings_key = f'{cls.options["runtype"]}-s' if cls.options['smallwindow'] else cls.options["runtype"]
-        settings_file = settings[settings_key]
+        settings_file = settings_files[settings_key]
         with open(settings_file) as tpl:
             soup = BeautifulSoup(tpl, 'lxml-xml')
             for textvar in ('PathRoot', 'PathMeteo', 'PathOut', 'PathStatic', 'PathInit'):
@@ -91,7 +93,7 @@ class TestLongRun:
 
     def test_rep_maps(self):
         # check all nc. maps in output folder
-        logger.info(' ================================= START NETCDF TESTS ================================= ')
+        logger.info(' ============================== START NETCDF TESTS ================================== ')
         comparator = NetCDFComparator(self.mask_map)
         diffs = comparator.compare_dirs(self.options['reference'], self.options['pathout'], skip_missing=False)
         if diffs:
@@ -100,7 +102,7 @@ class TestLongRun:
 
     def test_tss(self):
         # check all TSS in output folder
-        logger.info(' ================================== START TSS TESTS ================================== ')
+        logger.info(' ============================= START TSS TESTS ===================================== ')
         comparator = TSSComparator()
         diffs = comparator.compare_dirs(self.options['reference'], self.options['pathout'], skip_missing=False)
         if diffs:
