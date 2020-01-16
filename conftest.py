@@ -25,7 +25,7 @@ def pytest_addoption(parser):
     parser.addoption('-X', '--reference', type=lambda p: Path(p).absolute(),
                      help='Path to Lisflood oracle results', required=True)
     parser.addoption('-T', '--runtype', help='Test Type: e.g. EC6=EFAS Cold 6hourly run; GWD=GloFAS Warm Daily run',
-                     choices=['ECD', 'EC6', 'EWD', 'EW6', 'GCD', 'GWD'], required=True, default='ECD')
+                     choices=['ECD', 'EC6', 'EWD', 'EW6', 'GCD', 'GWD'], required=False, default='ECD')
     parser.addoption('-Q', '--smallwindow', help='If passed, a short (1 month) test will run',
                      action='store_true', required=False, default=False)
 
