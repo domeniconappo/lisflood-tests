@@ -33,7 +33,7 @@ pytest test_long_efas_run.py -s
 """
 
 @pytest.mark.usefixtures("options")
-class TestLongRun:
+class TestRun:
 
     @classmethod
     def setup_class(cls):
@@ -41,13 +41,6 @@ class TestLongRun:
         pybin = cls.options['python']
         lisflood_py = cls.options['lisflood']
         pathout = cls.options['pathout']
-        if not lisflood_py:
-            if not pathout:
-                raise ValueError('If --lisflood option is not set you must pass --pathout argument'
-                                 ' to point to existing LISFLOOD results')
-            # no need to run lisflood; just compare existing results
-            return
-        compile_krw = lisflood_py.parent.joinpath('hydrological_modules/compile_kinematic_wave_parallel_tools.py') if lisflood_py else None
         cls.settings_xml = cls.get_settings()
         cell = cls.settings_xml.select('lfuser textvar[name="MaskMap"]')[0]
         cls.mask_map = cell.attrs['value'].replace('$(PathRoot)', str(cls.options['pathroot']))
@@ -59,7 +52,15 @@ class TestLongRun:
             dest.write(cls.settings_xml.prettify())
         cls.settings_filepath = Path(filename).absolute()
 
+        if not lisflood_py:
+            if not pathout:
+                raise ValueError('If --lisflood option is not set you must pass --pathout argument'
+                                 ' to point to existing LISFLOOD results')
+            # no need to run lisflood; just compare existing results
+            return
+
         # Compile kinematic wave
+        compile_krw = lisflood_py.parent.joinpath('hydrological_modules/compile_kinematic_wave_parallel_tools.py') if lisflood_py else None
         kw_dir = lisflood_py.parent.joinpath('lisflood/hydrological_modules/')
         lis_dir = lisflood_py.parent
         compile_cmd = ' '.join((f'cd {kw_dir} &&', pybin.as_posix(), compile_krw.name, 'build_ext', '--inplace'))

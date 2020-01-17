@@ -12,8 +12,9 @@ def pytest_addoption(parser):
     parser.addoption('-P', '--python', type=lambda p: Path(p), help='Path to python binary', default='python')
     parser.addoption('-L', '--lisflood', type=lambda p: Path(p).absolute(),
                      help='Path to main lisf1.py script')
-    parser.addoption('-R', '--pathroot', type=lambda p: Path(p).absolute(),
-                     help='Path to Lisflood root directory')
+    # pathroot is needed even if test doesn't run any simulation, since we need it to find the MaskMap
+    parser.addoption('-R', '--pathroot', type=lambda p: Path(p).absolute(), required=True,
+                     help='Path to Root static data directory.')
     parser.addoption('-S', '--pathstatic', type=lambda p: Path(p).absolute(),
                      help='Path to Lisflood static data (e.g. maps)')
     parser.addoption('-M', '--pathmeteo', type=lambda p: Path(p).absolute(),
