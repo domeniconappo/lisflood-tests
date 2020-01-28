@@ -17,7 +17,7 @@ It's also possible to compare existing results, without running a simulation.
 | -O, --pathout    | Path/String  | Path to results for the version under test |
 | -X, --reference  | Path/String  | Path to Lisflood oracle data               |
 | -T, --runtype    | String       | Type of test to execute: see table below   |
-| -Q, --smallwindow| String       | If passed, run short simulation (1 month)  |
+| -Q, --smallwindow| Flag         | If passed, run short simulation (1 month)  |
 
 | Runtype option    | Description                     | Simulation length  |
 |:-----------------:|---------------------------------|--------------------|
