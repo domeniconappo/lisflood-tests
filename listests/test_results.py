@@ -12,12 +12,6 @@ from listests import logger, run_command, settings_files
 
 
 """
-Current Tests with settings_full_efas_day.xml/settings_full_efas_6hourly.xml
-With start and stop:
-
-Start Step - End Step:  9136  -  10042
-Start Date - End Date:  2015-01-06 06:00:00  -  2017-06-30 06:00:00
-
 How to run:
 
 pytest test_long_efas_run.py -s
@@ -54,7 +48,7 @@ class TestRun:
 
         if not lisflood_py:
             if not pathout:
-                raise ValueError('If --lisflood option is not set you must pass --pathout argument'
+                raise ValueError('If --lisflood/-L option is not set you must pass --pathout/-O argument'
                                  ' to point to existing LISFLOOD results')
             # no need to run lisflood; just compare existing results
             return
